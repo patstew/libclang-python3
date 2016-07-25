@@ -220,6 +220,14 @@ class SourceLocation(Structure):
     def offset(self):
         """Get the file offset represented by this source location."""
         return self._get_instantiation()[3]
+    
+    @property    
+    def is_in_main_file(self):
+        return conf.lib.clang_Location_isFromMainFile(self)
+    
+    @property    
+    def is_in_system_header(self):
+        return conf.lib.clang_Location_isInSystem_Header(self)
 
     def __eq__(self, other):
         return conf.lib.clang_equalLocations(self, other)
@@ -3636,6 +3644,14 @@ functionList = [
   ("clang_Type_visitFields",
    [Type, callbacks['fields_visit'], py_object],
    c_uint),
+
+  ("clang_Location_isFromMainFile",
+   [SourceLocation],
+   c_int),
+
+  ("clang_Location_isInSystemHeader",
+   [SourceLocation],
+   c_int),
 ]
 
 class LibclangError(Exception):
